@@ -7,6 +7,7 @@ import (
     "io/ioutil"
     "strings"
     "log"
+    "errors"
 )
 
 func FilePath(path string) string {
@@ -35,9 +36,12 @@ func CheckPermissions(path string) error {
         return err
     }
 
-    fmt.Println(info)
+    per := fmt.Sprintf("%o", os.FileMode.Perm(info.Mode()))
+    if per == "600" {
+        return nil
+    }
 
-    return nil
+    return errors.New("Incorrect file permissions")
 }
 
 func Read() (string, error) {

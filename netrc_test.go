@@ -2,6 +2,9 @@ package netrc
 
 import (
     "testing"
+    "os"
+    "log"
+    "fmt"
 )
 
 func TestFilePath(t *testing.T) {
@@ -24,18 +27,32 @@ func TestFilePath(t *testing.T) {
 func TestPermissions(t *testing.T) {
     tests := []struct {
         name string
-        per  int
+        per  uint32
     }{
         {"foo", 0777},
         {"bar", 0600},
         {"baz", 0606},
     }
     for _, test := range tests {
+        file, err := os.Create(test.name)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        file.Chmod(os.FileMode(test.per))
+
         res := CheckPermissions(test.name)
-        if test.per == 0600 && res.Error() != "" {
-            t.Errorf("Got error (%s) for name (%s)", res.Error(), test.name)
-        } else if res.Error() == "" {
+        if fmt.Sprintf("%o", test.per) == "600" {
+            if res != nil {
+                t.Errorf("Got error (%s) for name (%s) per (%o)", res.Error(), test.name, test.per)
+            }
+        } else if res == nil {
             t.Errorf("Expected error for name (%s)", test.name)
+        }
+
+        err = os.Remove(test.name)
+        if err != nil {
+            log.Fatal(err)
         }
     }
 }
