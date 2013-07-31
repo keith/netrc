@@ -11,36 +11,42 @@ import (
 )
 
 type Cred struct {
-    service  string,
-    username string,
-    password string,
+    User string
+    Pass string
 }
 
 type Netrc struct {
-    path string,
-    creds []Cred,
+    Path string
+    Creds []map[string]Cred
 }
 
-func Open(path string) Netrc {
+func Open(path string) *Netrc {
     filePath := FilePath(path)
     if !FileExists(filePath) {
         log.Fatalf("Netrc file does not exist in '%s'", filePath)
     }
+    
+    n := new(Netrc)
+    n.Path = filePath
+    n.Read()
+
+    return n
 }
 
 func (n *Netrc) Read() {
-    path := n.path
+    path := n.Path
     b, err := ioutil.ReadFile(path)
     if err != nil {
         log.Fatal(err)
     }
 
-    lines := strings.Split(string(b), "\n")
+    lines := strings.Fields(string(b))
     for i := 0; i < len(lines); i++ {
         line := strings.TrimSpace(lines[i])
-        if line == "" {
-            continue
-        }
+        fmt.Printf("'%s'\n", line)
+        // if line == "" {
+        //     continue
+        // }
     }
 }
 

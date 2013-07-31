@@ -5,6 +5,7 @@ import (
     "os"
     "log"
     "fmt"
+    "path"
 )
 
 func TestFilePath(t *testing.T) {
@@ -54,6 +55,26 @@ func TestPermissions(t *testing.T) {
         if err != nil {
             log.Fatal(err)
         }
+    }
+}
+
+func TestRead(t *testing.T) {
+    tests := [][]byte {
+        []byte("machine foobar username bazqix password sekret"),
+    }
+    
+    for _, test := range tests {
+        wd, _ := os.Getwd()
+        file, _ := os.Create("foo")
+        file.Write(test)
+        filepath := path.Join(wd, "foo")
+        n := Open(filepath)
+
+        if n.Path != filepath {
+            t.Errorf("Expected path to be (%s) got (%s)", filepath, n.Path)
+        }
+
+        os.Remove(filepath)
     }
 }
 
