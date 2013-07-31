@@ -10,6 +10,40 @@ import (
     "errors"
 )
 
+type Cred struct {
+    service  string,
+    username string,
+    password string,
+}
+
+type Netrc struct {
+    path string,
+    creds []Cred,
+}
+
+func Open(path string) Netrc {
+    filePath := FilePath(path)
+    if !FileExists(filePath) {
+        log.Fatalf("Netrc file does not exist in '%s'", filePath)
+    }
+}
+
+func (n *Netrc) Read() {
+    path := n.path
+    b, err := ioutil.ReadFile(path)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    lines := strings.Split(string(b), "\n")
+    for i := 0; i < len(lines); i++ {
+        line := strings.TrimSpace(lines[i])
+        if line == "" {
+            continue
+        }
+    }
+}
+
 func FilePath(path string) string {
     totalPath := ""
     usr, err := user.Current()
@@ -30,6 +64,14 @@ func FilePath(path string) string {
     return totalPath
 }
 
+func FileExists(path string) bool {
+    if _, err := os.Stat(path); os.IsNotExist(err) {
+        return false
+    }
+
+    return true
+}
+
 func CheckPermissions(path string) error {
     info, err := os.Stat(path)
     if err != nil {
@@ -43,6 +85,7 @@ func CheckPermissions(path string) error {
 
     return errors.New("Incorrect file permissions")
 }
+
 
 func Read() (string, error) {
     // home := os.Getenv("HOME")
