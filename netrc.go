@@ -27,6 +27,12 @@ type Netrc struct {
 	Creds map[string]*Cred
 }
 
+// A convenience method for opening the default .netrc
+//	Probably in $HOME/.netrc
+func OpenDefault() *Netrc {
+	return Open("")
+}
+
 // Opens the given path if it exists
 // If the path is invalid a fatal error is thrown
 // A new Netrc is created and the file is read into the Creds map
