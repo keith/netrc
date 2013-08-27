@@ -3,17 +3,19 @@ package netrc
 import (
 	"fmt"
 	"os"
+	"os/user"
 	"path"
 	"testing"
 )
 
 func TestFilePath(t *testing.T) {
+	usr, _ := user.Current()
 	tests := []struct {
 		in  string
 		out string
 	}{
-		{"", "/Users/ksmiley/.netrc"},
-		{".netlc", "/Users/ksmiley/.netlc"},
+		{"", usr.HomeDir + "/.netrc"},
+		{".netlc", usr.HomeDir + "/.netlc"},
 		{"/.netrc", "/.netrc"},
 	}
 	for _, test := range tests {
