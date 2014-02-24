@@ -26,6 +26,19 @@ func TestFilePath(t *testing.T) {
 	}
 }
 
+func TestFileExists(t *testing.T) {
+	filename := "foo.txt"
+	os.Create(filename)
+	if !FileExists(filename) {
+		t.Error("File should exist")
+	}
+
+	os.Remove(filename)
+	if FileExists(filename) {
+		t.Error("File should not exist")
+	}
+}
+
 func TestPermissions(t *testing.T) {
 	tests := []struct {
 		name string
