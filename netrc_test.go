@@ -81,6 +81,25 @@ func TestRead(t *testing.T) {
 			t.Errorf("Expected path to be (%s) got (%s)", filepath, n.Path)
 		}
 
+		n.Read()
+		if len(n.Creds) != 1 {
+			t.Errorf("Expected (%d) creds got (%d)", 1, len(n.Creds))
+		}
+
+		for key, val := range n.Creds {
+			if key != "foobar" {
+				t.Errorf("Expected key (%s) got (%s)", "foobar", key)
+			}
+
+			if val.User != "bazqix" {
+				t.Errorf("Expected value (%s) got (%s)", "bazqix", val.User)
+			}
+
+			if val.Pass != "sekret" {
+				t.Errorf("Expected value (%s) got (%s)", "sekret", val.Pass)
+			}
+		}
+
 		os.Remove(filepath)
 	}
 }
