@@ -1,12 +1,9 @@
 language: go
 go:
-- 1.2
-install:
-- go get code.google.com/p/go.tools/cmd/cover
-- go get github.com/mattn/goveralls
+  - 1.1
+  - 1.2
+  - release
+  - tip
+
 script:
-- go test -v -covermode=count -coverprofile=profile.cov
-- "$HOME/gopath/bin/goveralls -coverprofile=profile.cov -service=travis-ci"
-env:
-  global:
-    secure: RzOPyWOyYo5MW+eq5M+V+zz47oPFRPGCeiaD+dRj9Cni88SJm7gJb7aNUs8OC3lrYBamzBzhg7H0ky9VNEiP4qhVb+ALoifkxrBvTNl8m3agy98senJFFFkBtbXhJw21AgHrOOJn5BjPSkxYO4O/NN49nzwQpQZr2469WHCQ7m8=
+  - go test -v
