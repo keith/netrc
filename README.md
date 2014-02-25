@@ -4,6 +4,7 @@ This is a simple implementation for reading a [.netrc](http://www.gnu.org/softwa
 file for a user's credentials for services
 
 [![Build Status](https://travis-ci.org/Keithbsmiley/netrc.png)](https://travis-ci.org/Keithbsmiley/netrc)
+[![Coverage Status](https://coveralls.io/repos/Keithbsmiley/netrc/badge.png)](https://coveralls.io/r/Keithbsmiley/netrc)
 
 ## Installation
 
