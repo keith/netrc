@@ -98,11 +98,8 @@ func FilePath(path string) string {
 
 // Check to see if the file exists at the given path
 func FileExists(path string) bool {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return false
-	}
-
-	return true
+	_, err := os.Stat(path)
+	return !os.IsNotExist(err)
 }
 
 // Check the file permissions at the given path

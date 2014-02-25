@@ -26,6 +26,19 @@ func TestFilePath(t *testing.T) {
 	}
 }
 
+func TestFileExists(t *testing.T) {
+	filename := "foo.txt"
+	os.Create(filename)
+	if !FileExists(filename) {
+		t.Error("File should exist")
+	}
+
+	os.Remove(filename)
+	if FileExists(filename) {
+		t.Error("File should not exist")
+	}
+}
+
 func TestPermissions(t *testing.T) {
 	tests := []struct {
 		name string
@@ -66,6 +79,25 @@ func TestRead(t *testing.T) {
 
 		if n.Path != filepath {
 			t.Errorf("Expected path to be (%s) got (%s)", filepath, n.Path)
+		}
+
+		n.Read()
+		if len(n.Creds) != 1 {
+			t.Errorf("Expected (%d) creds got (%d)", 1, len(n.Creds))
+		}
+
+		for key, val := range n.Creds {
+			if key != "foobar" {
+				t.Errorf("Expected key (%s) got (%s)", "foobar", key)
+			}
+
+			if val.User != "bazqix" {
+				t.Errorf("Expected value (%s) got (%s)", "bazqix", val.User)
+			}
+
+			if val.Pass != "sekret" {
+				t.Errorf("Expected value (%s) got (%s)", "sekret", val.Pass)
+			}
 		}
 
 		os.Remove(filepath)
